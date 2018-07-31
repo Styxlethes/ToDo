@@ -5,7 +5,7 @@ from flask import render_template, redirect, url_for, flash
 from flask_login import login_required, login_user, logout_user
 # 自写模块
 from . import main
-from .form import TODOForm, LoginForm, RegisterForm, ResetPassword, ForgetPassword, ChangPassword, ResetEmail
+from .form import TODOForm, LoginForm, RegisterForm, ResetPassword, ForgetPassword, ResetEmail
 from app.models.article import Article
 from app.models.user import User
 from .. import db
@@ -16,6 +16,7 @@ from flask_login import current_user
 # 主页
 @main.route('/')
 def index():
+    print(datetime.utcnow())
     return render_template(
         'index.html', current_time=datetime.utcnow())
 
@@ -61,15 +62,20 @@ def logout():
 def register():
     form = RegisterForm()
     if form.validate():
-        new_user = User(nickname=form.nickname.data,
-                        email=form.email.data, password=form.password.data)
-        db.session.add(new_user)
-        db.session.commit()
-        token = new_user.generate_confirmation_token()
-        send_email(new_user.email, '确认您的账户', 'confirm',
-                   user=new_user, token=token)
-        flash('确认邮箱已发送至您的注册邮箱')
-        return redirect(url_for('main.login'))
+        try:
+            new_user = User(nickname=form.nickname.data,
+                            email=form.email.data, password=form.password.data)
+            db.session.add(new_user)
+            db.session.commit()
+            token = new_user.generate_confirmation_token()
+            send_email(new_user.email, '确认您的账户', 'email.confirm',
+                       user=new_user, token=token)
+            flash('确认邮箱已发送至您的注册邮箱')
+            return redirect(url_for('main.login'))
+        except Exception as e:
+            print(e)
+            flash('创建用户失败')
+
     return render_template('register.html', form=form)
 
 

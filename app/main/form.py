@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SubmitField, PasswordField, BooleanField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, Regexp
 from wtforms import ValidationError
-from falsk import current_user
+from flask_login import current_user
+from flask_pagedown.fields import PageDownField
 
 from app.models.user import User
 
@@ -11,7 +12,7 @@ class TODOForm(FlaskForm):
 
     title = StringField('输入题目', validators=[
         DataRequired(), Length(min=0, max=20)])
-    text = TextAreaField('输入ToDo', validators=[DataRequired()])
+    text = PageDownField('输入ToDo', validators=[DataRequired()])
     # checkbox = BooleanField('have do?', validators=[DataRequired()])
     submit = SubmitField('提交')
 

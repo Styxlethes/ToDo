@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_login import LoginManager
 from flask_mail import Mail
+from flask_pagedown import PageDown
 
 
 from app.models.base import db
@@ -18,6 +19,7 @@ login_manager.session_protection = 'strong'  # 'base'/None
 login_manager.login_veiw = 'login'
 
 email = Mail()
+pagedown = PageDown()
 
 
 def create_app():
@@ -38,6 +40,9 @@ def create_app():
 
     # 注册Mail
     email.init_app(app)
+
+    # 注册PageDown
+    pagedown.init_app(app)
 
     # flask-login的回调函数，在此处调用为的是免去出入栈的代码
     @login_manager.user_loader

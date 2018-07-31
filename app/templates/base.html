@@ -21,7 +21,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
-                    <img class="img-rounded profile-thumbnail" src="{{ current_user.gravatar(size=256)" >
+                    
                     <li><a href="{{ url_for('main.logout') }}">登出</a></li>
                     <li><a href="{{url_for('main.reset_password')}}">修改密码</a></li>
                     {% else %}
@@ -39,7 +39,7 @@
         {% for message in get_flashed_messages() %}
         <div class="alert alert-waring">
             <button type="button" class="close" data-dismiss='alert'>&times;</button>
-            {{ message }}
+            {{ message[-1] }}
         </div>
         {% endfor %}
 
@@ -47,8 +47,15 @@
 	</div>
 {% endblock %}
 
+{% block footer %}
+    <div  class="container">
+        <p class="text-muted">Power by Flask</p>
+        <p class="text-info">ToDo,just to do</p>
+    </div>
+{% endblock %}
 
-{# {% block scripts %}
+
+{% block body %}
 	{{ super() }}
-	{{ moment.include_moment }}
-{% endblock %} #}
+	{{ moment.include_moment() }}
+{% endblock %} 
